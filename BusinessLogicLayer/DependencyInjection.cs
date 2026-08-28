@@ -1,5 +1,4 @@
-﻿using BusinessLogicLayer.Entities.RepositoryContracts;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;

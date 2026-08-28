@@ -4,7 +4,7 @@ using FluentValidation.AspNetCore;
 using eCommerce.ProductMicroService.API.Middleware;
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDataAccessLayer();
+builder.Services.AddDataAccessLayer(builder.Configuration);
 builder.Services.AddBusinessLogicLayer();
 
 // Add services to the container.
