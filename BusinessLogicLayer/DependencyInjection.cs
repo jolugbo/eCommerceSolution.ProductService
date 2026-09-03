@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using eCommerce.BusinessLogicLayer.Mappers;
+using eCommerce.BusinessLogicLayer.ServiceContracts;
+using eCommerce.BusinessLogicLayer.Validators;
+using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace eCommerce.ProductService.BusinessLogicLayer;
 
@@ -9,8 +10,9 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddBusinessLogicLayer(this IServiceCollection services)
     {
-        //services.AddSingleton<IProductsRepository, ProductsRepository>();
-        //services.AddTransient<ApplicationDbContext>();
+        services.AddAutoMapper(typeof(ProducttToProductResponseMappingProfile).Assembly);
+        services.AddValidatorsFromAssemblyContaining<ProductAddRequestValidators>();
+        services.AddScoped<IProductService, eCommerce.BusinessLogicLayer.Services.ProductService>();
         return services;
     }
 }
