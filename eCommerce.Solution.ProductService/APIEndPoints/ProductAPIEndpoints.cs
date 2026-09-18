@@ -23,8 +23,8 @@ public static class ProductAPIEndpoints
             return Results.Ok(product);
         });
 
-        //Get  /api/products/search/product-id/{productId}
-        app.MapGet("/api/product/search/product-id/{SearchString}", async (IProductService productService, string SearchString) => {
+        //Get  /api/products/search/{ProductName}
+        app.MapGet("/api/product/search/{SearchString}", async (IProductService productService, string SearchString) => {
             IEnumerable<ProductResponse?> productsByProductName = await productService.GetProductsByCondition(
                 temp => temp.ProductName != null && temp.ProductName.Contains(SearchString, StringComparison.OrdinalIgnoreCase));
             IEnumerable<ProductResponse?> productsByCategory = await productService.GetProductsByCondition(

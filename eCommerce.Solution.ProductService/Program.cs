@@ -3,6 +3,7 @@ using eCommerce.ProductService.BusinessLogicLayer;
 using FluentValidation.AspNetCore;
 using eCommerce.ProductMicroService.API.Middleware;
 using eCommerce.ProductMicroService.API.APIEndPoints;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,11 +13,22 @@ builder.Services.AddBusinessLogicLayer();
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddFluentValidationAutoValidation();  
+builder.Services.AddFluentValidationAutoValidation();
 
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-//builder.Services.AddOpenApi();
+builder.Services.ConfigureHttpJsonOptions(options =>
+options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins("http://localhost:4200")
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    });
+});
 var app = builder.Build();
 
 app.UseExceptionHandlingMiddleware();
@@ -26,8 +38,10 @@ if (app.Environment.IsDevelopment())
 {
     //app.MapOpenApi();
 }
-
-//app.UseHttpsRedirection();
+app.UseCors();
+app.UseSwagger();
+app.UseSwaggerUI();
+app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

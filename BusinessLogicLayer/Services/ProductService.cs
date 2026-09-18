@@ -104,7 +104,7 @@ public class ProductService : IProductService
             throw new ArgumentException(error);
         }
         var request = _mapper.Map<Product>(productUpdateRequest);
-        var updateProduct = await _productRepository.AddProduct(request);
+        var updateProduct = await _productRepository.UpdateProduct(request);
         if (updateProduct == null)
         {
             return null;
