@@ -1,30 +1,28 @@
-# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-# This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
-USER $APP_UID
+USER app
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
-
-# This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["ProductMicroService.API/ProductMicroService.API.csproj", "ProductMicroService.API/"]
-RUN dotnet restore "./ProductMicroService.API/ProductMicroService.API.csproj"
+# Copy full repository into the image (build context is repo root)
 COPY . .
-WORKDIR "/src/ProductMicroService.API"
-RUN dotnet build "./ProductMicroService.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+# Set working directory to the API project folder so project-relative references resolve
+WORKDIR "/src/eCommerce.Solution.ProductService"
+RUN dotnet restore "ProductMicroService.API.csproj"
+RUN dotnet build "ProductMicroService.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./ProductMicroService.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+ENV MYSQL_HOST=localhost
+ENV MYSQL_PASSWORD=admin
 ENTRYPOINT ["dotnet", "ProductMicroService.API.dll"]
