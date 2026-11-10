@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Configuration;
+using System.Net.Sockets;
 
 namespace eCommerce.ProductsService.DataAccessLayer;
 
@@ -25,3 +26,4 @@ public static class DependencyInjection
         return services;
     }
 }
+

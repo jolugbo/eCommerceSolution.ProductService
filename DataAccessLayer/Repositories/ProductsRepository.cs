@@ -3,6 +3,9 @@ using eCommerce.DataAccessLayer.Entities;
 using eCommerce.DataAccessLayer.RepositoryContracts;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using System.Net;
+using System.Net.Sockets;
+using System.Xml.Linq;
 
 namespace eCommerce.DataAccessLayer.Repositories;
 
@@ -68,3 +71,7 @@ public class ProductsRepository : IProductsRepository
         return existingProduct;
     }
 }
+
+//docker rm -f mysql-host-productsmicroservice 2>$null $dbScriptPath = (Resolve-Path ".\DataAccessLayer").Path
+
+//docker run - d --name mysql-host-productsmicroservice --network products-microservice - network -e MYSQL_ROOT_PASSWORD = admin -p 3306:3306 -v "${dbScriptPath}:/docker-entrypoint-initdb.d:ro" --health-cmd="mysqladmin ping -h localhost -uroot -padmin" --health-interval=5s --health-timeout=5s --health-retries=20 mysql:8.4
