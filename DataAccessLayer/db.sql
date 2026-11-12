@@ -2,6 +2,11 @@
 CREATE DATABASE IF NOT EXISTS ecommerceproductsdatabase;
 USE ecommerceproductsdatabase;
 
+-- Create an API user with access from any host and grant privileges
+CREATE USER IF NOT EXISTS 'api'@'%' IDENTIFIED BY 'admin';
+GRANT ALL PRIVILEGES ON ecommerceproductsdatabase.* TO 'api'@'%';
+FLUSH PRIVILEGES;
+
 -- Create the products table
 CREATE TABLE IF NOT EXISTS Products (
   ProductID char(36) NOT NULL,

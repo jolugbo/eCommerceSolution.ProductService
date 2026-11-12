@@ -3,8 +3,8 @@
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
 USER app
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 9090
+EXPOSE 9091
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
@@ -24,5 +24,8 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENV MYSQL_HOST=localhost
+ENV MYSQL_PORT=3306
+ENV MYSQL_USER=api
+ENV MYSQL_DATABASE=ecommerceproductsdatabase
 ENV MYSQL_PASSWORD=admin
 ENTRYPOINT ["dotnet", "ProductMicroService.API.dll"]
